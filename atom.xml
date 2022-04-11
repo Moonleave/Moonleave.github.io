@@ -6,7 +6,7 @@
   <link href="http://ze520.cn/atom.xml" rel="self"/>
   
   <link href="http://ze520.cn/"/>
-  <updated>2022-04-10T07:38:14.943Z</updated>
+  <updated>2022-04-11T07:56:05.749Z</updated>
   <id>http://ze520.cn/</id>
   
   <author>
@@ -21,8 +21,15 @@
     <link href="http://ze520.cn/posts/9bbea6db.html"/>
     <id>http://ze520.cn/posts/9bbea6db.html</id>
     <published>2022-04-10T02:59:27.000Z</published>
-    <updated>2022-04-10T07:38:14.943Z</updated>
+    <updated>2022-04-11T07:56:05.749Z</updated>
     
+    <content type="html"><![CDATA[<h1 id="2-类加载子系统"><a href="#2-类加载子系统" class="headerlink" title="2.类加载子系统"></a>2.类加载子系统</h1><h2 id="2-1类加载系统的位置"><a href="#2-1类加载系统的位置" class="headerlink" title="2.1类加载系统的位置"></a>2.1类加载系统的位置</h2><p>好的~我们接下来就要学习类加载子系统的知识了，冲冲冲！！</p><p>首先我们回顾看一下<code>类加载子系统</code>在jvm中的位置。</p><p><img src="../images/jvm-1-jvm%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.jpg"></p><h2 id="2-2类加载器的作用"><a href="#2-2类加载器的作用" class="headerlink" title="2.2类加载器的作用"></a>2.2类加载器的作用</h2><ul><li>类加载子系统负责从文件系统或者网络中<code>加载Clas文件</code>,class文件在文件开头有特定的文件标识（后面会讲到，这个被称为“魔术”）。</li><li>classLoader只负责class文件的加载，至于它是否可以运行，则由ExecutionEngine决定。</li><li>加载的类信息存放于一块称为<code>方法区</code>的内存空间。（方法区也是后面一个重点，我们后面会慢慢介绍）</li></ul><p><img src="../images/jvm/jvm-2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E8%A7%92%E8%89%B2.jpg"></p><h2 id="2-3类加载器系统的执行流程"><a href="#2-3类加载器系统的执行流程" class="headerlink" title="2.3类加载器系统的执行流程"></a>2.3类加载器系统的执行流程</h2><p><img src="../images/jvm/jvm-2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.jpg"></p><ol><li><p>类加载系统的<code>加载</code>过程</p><ol><li>通过一个类的全限定名获取定义此类的二进制字节流</li><li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li><li>在内存中生成一个代表这个类的<code>java.lang.class对象</code>作为方法区这个类的各种数据的访问入口</li></ol></li><li><p>类加载系统的<code>链接</code>过程</p><p><img src="../images/jvm/jvm-2-%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B.jpg"></p></li><li><p>类加载系统的初始化过程</p><p><img src="../images/jvm/jvm-2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B.jpg"></p></li></ol><h2 id="2-4类加载器的分类"><a href="#2-4类加载器的分类" class="headerlink" title="2.4类加载器的分类"></a>2.4类加载器的分类</h2><p>JVM有两种类型的加载器：引导类加载器和自定义类加载器</p><p>Bootstrap Class Loader 是引导类加载器，其余的都是自定义类加载器</p><h3 id="2-4-1启动类加载器"><a href="#2-4-1启动类加载器" class="headerlink" title="2.4.1启动类加载器"></a>2.4.1启动类加载器</h3><p><img src="../images/jvm/jvm-2-%E5%BC%95%E5%AF%BC%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg"></p><h3 id="2-4-2扩展类加载器"><a href="#2-4-2扩展类加载器" class="headerlink" title="2.4.2扩展类加载器"></a>2.4.2扩展类加载器</h3><p><img src="../images/jvm/jvm-2-%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg"></p><h3 id="2-4-3应用程序类加载器"><a href="#2-4-3应用程序类加载器" class="headerlink" title="2.4.3应用程序类加载器"></a>2.4.3应用程序类加载器</h3><p><img src="../images/jvm/jvm-2-%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg"></p><h3 id="2-4-4自定义类加载器"><a href="#2-4-4自定义类加载器" class="headerlink" title="2.4.4自定义类加载器"></a>2.4.4自定义类加载器</h3><p>我们平时开发中，类加载几乎都是上面3种类加载器配合使用的，那我们为什么还需要使用自定义类加载器呢？</p><ul><li>防止加载类</li><li>修改类加载的方式</li><li>扩展加载源</li><li>防止源码泄露</li></ul><p>问：关于如何编写自定义类加载器呢？</p><p>答：我们可以直接继承URLClassLoader类</p><p>【注：本教程旨在互相学习，有借鉴搬移其他平台（比如尚硅谷）的成分，不为盈利（bilbil尚硅谷确实很好）】</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;2-类加载子系统&quot;&gt;&lt;a href=&quot;#2-类加载子系统&quot; class=&quot;headerlink&quot; title=&quot;2.类加载子系统&quot;&gt;&lt;/a&gt;2.类加载子系统&lt;/h1&gt;&lt;h2 id=&quot;2-1类加载系统的位置&quot;&gt;&lt;a href=&quot;#2-1类加载系统的位置&quot; class</summary>
+      
     
     
     
@@ -83,9 +90,9 @@
     <link href="http://ze520.cn/posts/15bc6d90.html"/>
     <id>http://ze520.cn/posts/15bc6d90.html</id>
     <published>2022-04-07T04:06:52.000Z</published>
-    <updated>2022-04-10T08:31:08.864Z</updated>
+    <updated>2022-04-11T07:59:51.890Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="jvm系列-第1篇【jvm基本结构】"><a href="#jvm系列-第1篇【jvm基本结构】" class="headerlink" title="jvm系列-第1篇【jvm基本结构】"></a>jvm系列-第1篇【jvm基本结构】</h1><h2 id="1-jvm是什么？"><a href="#1-jvm是什么？" class="headerlink" title="1.jvm是什么？"></a>1.jvm是什么？</h2><p>JVM是java虚拟机（Java Virtual Machine）的英文简称。</p><p>​    虚拟机是一种抽象化的计算机，通过在实际的计算机上仿真模拟各种计算机功能来实现的。Java虚拟机有自己完善的硬体架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。Java虚拟机屏蔽了与具体操作系统平台相关的信息，使得Java程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p><blockquote><p>简单来说JVM是用来解析和运行Java程序的。</p></blockquote><p>大家都知道Java是跨平台的语言，这都要归功于java虚拟机，即jvm的作用。为了让大家更好理解jvm的跨平台性，这里贴一张图。</p><p><img src="../images/jvm-1-jvm%E8%B7%A8%E5%B9%B3%E5%8F%B0.jpg"></p><p>Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码==（字节码）==，就可以在多种平台上不加修改地运行。最终实现一次编译，到处执行。</p><p>那么jvm在那里呢？</p><p><img src="../images/jvm-1-jvm%E7%9A%84%E4%BD%8D%E7%BD%AE.jpg"></p><p>​    用户使用编译器（javac指令）编译出字节码文件【tips:1】。然后只要你的电脑里安装了jre【tips:2】，就可以运行这个字节码文件了。</p><p>tips1:【idea这种是编辑器，他可以使用快捷的使用javac编译出字节码文件】</p><p>tips2:【我们安装的jdk（开发工具包）已经包括了jre(运行环境)】</p><p><img src="../images/jvm-1-jdk%E4%B8%8Ejre.jpg"></p><p>【JRE包括JVM,JDK包括JRE,IDEA使用JDK】</p><p>好了，我们要学习的重点只是就是os上，jre下的JVM，鼎鼎大名的==JVM虚拟机==！！</p><h2 id="2-jvm包括什么？"><a href="#2-jvm包括什么？" class="headerlink" title="2.jvm包括什么？"></a>2.jvm包括什么？</h2><p>jvm其实很复杂，这里先给大家展示一下他的简略结构图</p><p><img src="../images/jvm-1-jvm%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E7%AE%80%E6%B4%81%E7%89%88.jpg"></p><p>​    前面说过，我们是通过编译器编译出==字节码文件==，然后给jvm的，所以我们看这个图可以发现，jvm的初始入口就是从字节码文件开始的。</p><p>我们将这个图稍微细化一些。<br><img src="../images/jvm-1-jvm%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.jpg"></p><p>同学们，不要慌。我们接下来将会对这里面的结构进行拆块的剖析。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="jvm系列-第1篇【jvm基本结构】"><a href="#jvm系列-第1篇【jvm基本结构】" class="headerlink" title="jvm系列-第1篇【jvm基本结构】"></a>jvm系列-第1篇【jvm基本结构】</h1><h2 id="1-jvm是什么？"><a href="#1-jvm是什么？" class="headerlink" title="1.jvm是什么？"></a>1.jvm是什么？</h2><p>JVM是java虚拟机（Java Virtual Machine）的英文简称。</p><p>​    虚拟机是一种抽象化的计算机，通过在实际的计算机上仿真模拟各种计算机功能来实现的。Java虚拟机有自己完善的硬体架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。Java虚拟机屏蔽了与具体操作系统平台相关的信息，使得Java程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p><blockquote><p>简单来说JVM是用来解析和运行Java程序的。</p></blockquote><p>大家都知道Java是跨平台的语言，这都要归功于java虚拟机，即jvm的作用。为了让大家更好理解jvm的跨平台性，这里贴一张图。</p><p><img src="../images/jvm/jvm-1-jvm%E8%B7%A8%E5%B9%B3%E5%8F%B0.jpg"></p><p>Java语言使用Java虚拟机屏蔽了与具体平台相关的信息，使得Java语言编译程序只需生成在Java虚拟机上运行的目标代码==（字节码）==，就可以在多种平台上不加修改地运行。最终实现一次编译，到处执行。</p><p>那么jvm在那里呢？</p><p><img src="../images/jvm/jvm-1-jvm%E7%9A%84%E4%BD%8D%E7%BD%AE.jpg"></p><p>​    用户使用编译器（javac指令）编译出字节码文件【tips:1】。然后只要你的电脑里安装了jre【tips:2】，就可以运行这个字节码文件了。</p><p>tips1:【idea这种是编辑器，他可以使用快捷的使用javac编译出字节码文件】</p><p>tips2:【我们安装的jdk（开发工具包）已经包括了jre(运行环境)】</p><p><img src="../images/jvm/jvm-1-jdk%E4%B8%8Ejre.jpg"></p><p>【JRE包括JVM,JDK包括JRE,IDEA使用JDK】</p><p>好了，我们要学习的重点只是就是os上，jre下的JVM，鼎鼎大名的==JVM虚拟机==！！</p><h2 id="2-jvm包括什么？"><a href="#2-jvm包括什么？" class="headerlink" title="2.jvm包括什么？"></a>2.jvm包括什么？</h2><p>jvm其实很复杂，这里先给大家展示一下他的简略结构图</p><p><img src="../images/jvm/jvm-1-jvm%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E7%AE%80%E6%B4%81%E7%89%88.jpg"></p><p>看图我们知道，jvm有以下几个部分：</p><ol><li>类加载子系统</li><li>运行时数据区【方法区，堆，java栈，本地方法栈，程序计数器】</li><li>执行引擎</li><li>本地方法接口</li><li>本地方法库</li></ol><p>​    前面说过，我们是通过编译器编译出==字节码文件==，然后给jvm的，所以我们看这个图可以发现，jvm的初始入口就是从字节码文件开始的。</p><p>我们将这个图稍微细化一些。<br><img src="../images/jvm/jvm-1-jvm%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84.jpg"></p><p>同学们，不要慌。我们接下来将会对这里面的结构进行拆块的剖析。</p><p>【注：本教程旨在互相学习，有借鉴搬移其他平台（比如尚硅谷）的成分，不为盈利（bilbil尚硅谷确实很好）】</p>]]></content>
     
     
       
